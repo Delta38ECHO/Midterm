@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-struct vec2
+struct vec2  //++++++		May be responsible for start post..
 {
     float x = 0;
     float y = 0;
@@ -63,13 +63,13 @@ class FlappyRunner : public Game
     constexpr static double flapDuration = 0.1;
 
     // How fast the bird is moving horizontally
-    constexpr static double forwardSpeed = 0.016;
+    constexpr static double forwardSpeed = 0.020;   //Originally 0.016
 
     // Altitude loss.
     constexpr static float gravity = 0.2f;
 
     // How much the bird moves up on a flap
-    constexpr static float flapForce = 2.0f;
+    constexpr static float flapForce = -2.0f;   //++++		Could be a sense as to why char moves down.   ->  Success -  inverting gravity makes bird go UP.
 
     // Mutable data
 
@@ -95,29 +95,78 @@ class FlappyRunner : public Game
 
     // Static data and functions
 
-    // The player is drawn as a 4x4 set of characters
-    constexpr static int displaySize = 4;
+    // The player is drawn as a 4x4 set of characters  ---->  6x8
+    constexpr static int displaySize = 4; //Originally 4
 
     // But for collision detection, we just consider a 2x2 square to make
     // the player feel good when they avoid near-misses. 
-    constexpr static int playerSize = 2;
+    constexpr static int playerSize = 2;  //Originally 2
     // As a result, only the x-marked positions will be checked for collision
     // dddd    
     // dxxd    
     // dxxd
     // dddd
-
+	
+	//Revamp:
+		/*
+			Display Size = rows available
+			PlayerSize = spaces in rows to be counted for collision::
+			SO-
+			Display size = 6x8 with 9 spaces inside.
+			-=- Only going to count 4 spaces inside.
+			
+			//ddddddddd
+			//ddxxxxddd
+			//ddxxxxddd
+			//ddxxxxddd
+			//ddxxxxddd
+			//ddddddddd
+		*/
+//+++++		ASCII Art to be updated.		
     const char * flap[displaySize] = {
-        "===@",
-        "\\/v ",
+        "-=.>",
+        " \\/v",
         "    ",
         "    "
+		
+		/*
+		"         ",
+		"(  _('>  ",
+		"(_(//= ) ",  //FAIL -> / & \ are ESC chars and null full bird view.
+		"  //-= \\",	//This is so dumb... Must make simpler bird...
+		"         ",
+		"         "
+		*/
+		
+		/*	
+			Del on completion: Concept for ASCII bird:: 6x6 ; Bird is 4x4 so space is 6x6, so collision should be 4x4. 
+		
+			" (\  }/ " 
+			"(  \_('>"  
+			"(__(=_) "
+			"   -=   "
+			  
+			"	      "
+			"(  _('>  "
+		    "(__(/= ) "
+		    "  (/-= }\"
+			         
+		*/
     };
     const char * unflap[displaySize] = {
         "    ",
-        "/\\^ ",
-        "===@",
+        " /\\^",
+        "-=.>",
         "    "
+		
+		/*
+		"        ",
+		"        ",
+		"(\\  }//",
+		"( \\_('>",
+		"(__(=_) ",
+		"   -=   "
+		*/
     };
 
     // Copies the bird to the screen
@@ -174,7 +223,7 @@ public:
                 char screenChar = screen[roundedPosition.y + y][roundedPosition.x + x];
                 if (screenChar != ' ')
                 {
-                    mvprintw(22, 0, "oh no colliding");
+                    mvprintw(22, 0, "oh no, colliding");
                     return true;
                 }
             }
