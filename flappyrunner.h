@@ -17,7 +17,8 @@ struct ivec2
     int y = 0;
 };
 
-// A wall with a hole to fly through
+// A wall with a hole to fly through  //Has no collision elements attributed -> needs some from 
+// //isColliding() and screenChar.
 struct obstacle
 {
     int x = WIDTH;
